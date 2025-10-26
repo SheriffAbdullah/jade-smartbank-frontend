@@ -16,6 +16,7 @@ export const Profile: React.FC = () => {
   const [kycData, setKycData] = useState({
     document_type: 'pan' as const,
     document_number: '',
+    file: null as File | null,
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -39,10 +40,20 @@ export const Profile: React.FC = () => {
     setSuccess('');
 
     try {
-      await authApi.uploadKYC(kycData);
+      if (!kycData.file) {
+        setError('Please select a file to upload');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('document_type', kycData.document_type);
+      formData.append('document_number', kycData.document_number);
+      formData.append('file', kycData.file);
+
+      await authApi.uploadKYC(formData);
       setSuccess('KYC document uploaded successfully!');
       setShowKYCForm(false);
-      setKycData({ document_type: 'pan', document_number: '' });
+      setKycData({ document_type: 'pan', document_number: '', file: null });
       loadKYCStatus();
       refreshUser();
     } catch (err: any) {
@@ -149,6 +160,22 @@ export const Profile: React.FC = () => {
                   placeholder="Enter document number"
                   required
                 />
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Upload Document
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={(e) => setKycData({ ...kycData, file: e.target.files?.[0] || null })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                    required
+                  />
+                  <p className="text-sm text-gray-500 mt-1">
+                    Accepted formats: JPG, PNG, PDF (Max 5MB)
+                  </p>
+                </div>
 
                 {error && (
                   <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
