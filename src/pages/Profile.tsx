@@ -7,6 +7,7 @@ import { authApi } from '../api/auth';
 import { useAuth } from '../contexts/AuthContext';
 import { User, Shield, FileText } from 'lucide-react';
 import type { KYCDocument } from '../types';
+import { formatApiError } from '../utils/errorHandler';
 
 export const Profile: React.FC = () => {
   const { user, refreshUser } = useAuth();
@@ -45,7 +46,7 @@ export const Profile: React.FC = () => {
       loadKYCStatus();
       refreshUser();
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Upload failed');
+      setError(formatApiError(err) || 'Upload failed');
     }
   };
 

@@ -4,6 +4,7 @@ import { authApi } from '../api/auth';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/Card';
+import { formatApiError } from '../utils/errorHandler';
 
 export const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ export const Register: React.FC = () => {
       await authApi.register(registerData);
       navigate('/login', { state: { message: 'Registration successful! Please login.' } });
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Registration failed. Please try again.');
+      setError(formatApiError(err) || 'Registration failed. Please try again.');
     } finally {
       setIsLoading(false);
     }

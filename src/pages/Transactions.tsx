@@ -7,6 +7,7 @@ import { accountsApi } from '../api/accounts';
 import { transactionsApi } from '../api/transactions';
 import { ArrowLeftRight, Plus } from 'lucide-react';
 import type { Account, Transaction } from '../types';
+import { formatApiError } from '../utils/errorHandler';
 
 export const Transactions: React.FC = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -78,7 +79,7 @@ export const Transactions: React.FC = () => {
       setFormData({ from_account_id: '', to_account_id: '', account_id: '', amount: 0, description: '' });
       loadData();
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Transaction failed');
+      setError(formatApiError(err) || 'Transaction failed');
     }
   };
 

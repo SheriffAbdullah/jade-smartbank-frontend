@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/Card';
+import { formatApiError } from '../utils/errorHandler';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -23,7 +24,7 @@ export const Login: React.FC = () => {
       await login({ email, password });
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Login failed. Please check your credentials.');
+      setError(formatApiError(err) || 'Login failed. Please check your credentials.');
     } finally {
       setIsLoading(false);
     }

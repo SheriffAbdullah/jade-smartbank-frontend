@@ -7,6 +7,7 @@ import { loansApi } from '../api/loans';
 import { accountsApi } from '../api/accounts';
 import { Calculator, Plus, Banknote } from 'lucide-react';
 import type { Loan, Account, EMICalculationResponse } from '../types';
+import { formatApiError } from '../utils/errorHandler';
 
 export const Loans: React.FC = () => {
   const [loans, setLoans] = useState<Loan[]>([]);
@@ -60,7 +61,7 @@ export const Loans: React.FC = () => {
       const result = await loansApi.calculateEMI(calculatorData);
       setEmiResult(result);
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Calculation failed');
+      setError(formatApiError(err) || 'Calculation failed');
     }
   };
 
@@ -82,7 +83,7 @@ export const Loans: React.FC = () => {
       });
       loadData();
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Application failed');
+      setError(formatApiError(err) || 'Application failed');
     }
   };
 

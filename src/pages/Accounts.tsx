@@ -6,6 +6,7 @@ import { Input } from '../components/Input';
 import { accountsApi } from '../api/accounts';
 import { CreditCard, Plus } from 'lucide-react';
 import type { Account, AccountCreate } from '../types';
+import { formatApiError } from '../utils/errorHandler';
 
 export const Accounts: React.FC = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
@@ -42,7 +43,7 @@ export const Accounts: React.FC = () => {
       setFormData({ account_type: 'savings', initial_deposit: 0 });
       loadAccounts();
     } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to create account');
+      setError(formatApiError(err) || 'Failed to create account');
     }
   };
 
