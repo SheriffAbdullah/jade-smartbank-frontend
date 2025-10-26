@@ -18,7 +18,7 @@ export const authApi = {
   },
 
   uploadKYC: async (data: KYCDocumentUpload | FormData) => {
-    const response = await apiClient.post('/kyc/documents', data, {
+    const response = await apiClient.post('/auth/kyc/documents', data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
