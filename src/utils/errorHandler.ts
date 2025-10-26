@@ -12,10 +12,6 @@ interface PydanticError {
   url?: string;
 }
 
-interface ApiErrorResponse {
-  detail?: string | PydanticError[];
-}
-
 /**
  * Format API error for user-friendly display
  * @param error - The error object from API call
